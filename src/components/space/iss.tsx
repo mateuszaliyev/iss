@@ -1,75 +1,54 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef } from "react";
 
-import { useFrame } from "@react-three/fiber";
-import type { Mesh } from "three";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { Mesh } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { getLatLngObj } from "tle.js";
+
+import { useFocus } from "@/hooks/focus";
+import { useIss } from "@/hooks/iss";
 
 import { trpc } from "@/utilities/trpc";
 
 export const Iss = () => {
-  const { data } = trpc.iss.position.get.current.useQuery(undefined, {
-    refetchInterval: 1000 * 60,
-  });
-
-  const [index, setIndex] = useState(0);
+  const { data: tle } = trpc.iss.tle.useQuery();
 
   const issRef = useRef<Mesh>(null);
 
-  // console.log(data?.epoch);
+  const { position, setPosition } = useIss();
+
+  const { focus } = useFocus();
+
+  const gltf = useLoader(GLTFLoader, "/assets/models/iss47.gltf");
 
   useFrame(() => {
-    if (!issRef.current || !data) {
+    if (!tle || !issRef.current) {
       return;
     }
 
-    // const element = data[Math.floor(index)];
+    const { lat: latitude, lng: longitude } = getLatLngObj(tle, Date.now());
 
-    // if (element) {
-    //   issRef.current.position.x = element.position.x / 1000;
-    //   issRef.current.position.y = element.position.y / 1000;
-    //   issRef.current.position.z = element.position.z / 1000;
-
-    //   setIndex((index) => {
-    //     console.log(element.epoch);
-
-    //     return index + 0.1;
-    //   });
-    // }
-
-    // issRef.current.position.x = data.position.y / 1000;
-    // issRef.current.position.y = data.position.x / 1000;
-    // issRef.current.position.z = data.position.z / 1000;
-
-    const lat = 47;
-    const lon = -70;
-
-    const earthRadius = 6378.137;
+    const distanceFromEarthCenter = 6378 + 400;
 
     const x =
-      earthRadius *
-      Math.cos((lat * Math.PI) / 180) *
-      Math.cos((lon * Math.PI) / 180);
-
+      (distanceFromEarthCenter * Math.sin((longitude * Math.PI) / 180)) / 1000;
     const y =
-      earthRadius *
-      Math.cos((lat * Math.PI) / 180) *
-      Math.sin((lon * Math.PI) / 180);
+      (distanceFromEarthCenter * Math.sin((latitude * Math.PI) / 180)) / 1000;
+    const z =
+      (distanceFromEarthCenter * Math.cos((longitude * Math.PI) / 180)) / 1000;
 
-    const z = earthRadius * Math.sin((lat * Math.PI) / 180);
+    setPosition({ x, y, z });
 
-    console.log("lat lon", x, y, z);
-    console.log("iss", data.position.x, data.position.y, data.position.z);
-
-    issRef.current.position.x = x / 1000;
-    issRef.current.position.y = y / 1000;
-    issRef.current.position.z = z / 1000;
+    issRef.current.position.set(x, y, z);
   });
 
   return (
-    <>
-      <mesh ref={issRef}>
-        <sphereGeometry args={[0.1, 50, 50]} />
-        <meshStandardMaterial color={0xff0000} />
-      </mesh>
-    </>
+    <Suspense fallback={null}>
+      <primitive
+        object={gltf.scene}
+        ref={issRef}
+        scale={[0.001, 0.001, 0.001]}
+      />
+    </Suspense>
   );
 };

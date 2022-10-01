@@ -14,6 +14,7 @@ specifiers:
   '@types/prettier': ^2.7.1
   '@types/react': 18.0.14
   '@types/react-dom': 18.0.5
+  '@types/suncalc': ^1.8.1
   '@types/three': ^0.144.0
   '@typescript-eslint/eslint-plugin': ^5.33.0
   '@typescript-eslint/parser': ^5.33.0
@@ -35,11 +36,14 @@ specifiers:
   prisma: ^4.1.0
   react: 18.2.0
   react-dom: 18.2.0
+  suncalc: ^1.9.0
   superjson: 1.9.1
   tailwindcss: ^3.1.6
   three: ^0.145.0
+  tle.js: ^4.7.2
   typescript: 4.7.4
   zod: ^3.18.0
+  zustand: ^4.1.1
 
 dependencies:
   '@next-auth/prisma-adapter': 1.0.4_kapgdjynksezfxof2u7fjv3gqe
@@ -56,15 +60,19 @@ dependencies:
   next-auth: 4.10.3_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  suncalc: 1.9.0
   superjson: 1.9.1
   three: 0.145.0
+  tle.js: 4.7.2
   zod: 3.19.1
+  zustand: 4.1.1_react@18.2.0
 
 devDependencies:
   '@types/node': 18.0.0
   '@types/prettier': 2.7.1
   '@types/react': 18.0.14
   '@types/react-dom': 18.0.5
+  '@types/suncalc': 1.8.1
   '@types/three': 0.144.0
   '@typescript-eslint/eslint-plugin': 5.38.1_2zm3paqatenojirbxur4ou5aou
   '@typescript-eslint/parser': 5.38.1_4rv7y5c6xz3vfxwhbrcxxi73bq
@@ -600,6 +608,10 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+
+  /@types/suncalc/1.8.1:
+    resolution: {integrity: sha512-PNtzFQhdAIw3x5HEjVMxbyBwciX42C/Cg6J1foq2z/t9rucLGGu9nqQxOl005wGZR/fOxw49exwZUCmbnT/vGw==}
+    dev: true
 
   /@types/three/0.144.0:
     resolution: {integrity: sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==}
@@ -2685,6 +2697,10 @@ packages:
       is-regex: 1.1.4
     dev: true
 
+  /satellite.js/4.1.4:
+    resolution: {integrity: sha512-OGUrs1GoGKjy9FYbW2ZaM5slaPfJaYrcxjE3YQTeR/OGyFPCxb6HK22Chao55POU06pdmNAdW5rtKJURse0+XA==}
+    dev: false
+
   /scheduler/0.21.0:
     resolution: {integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==}
     dependencies:
@@ -2809,6 +2825,10 @@ packages:
       react: 18.2.0
     dev: false
 
+  /suncalc/1.9.0:
+    resolution: {integrity: sha512-vMJ8Byp1uIPoj+wb9c1AdK4jpkSKVAywgHX0lqY7zt6+EWRRC3Z+0Ucfjy/0yxTVO1hwwchZe4uoFNqrIC24+A==}
+    dev: false
+
   /superjson/1.9.1:
     resolution: {integrity: sha512-oT3HA2nPKlU1+5taFgz/HDy+GEaY+CWEbLzaRJVD4gZ7zMVVC4GDNFdgvAZt6/VuIk6D2R7RtPAiCHwmdzlMmg==}
     engines: {node: '>=10'}
@@ -2906,6 +2926,13 @@ packages:
 
   /tiny-inflate/1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
+    dev: false
+
+  /tle.js/4.7.2:
+    resolution: {integrity: sha512-Ucbz7YsIkhymgH/K6mQ5nCldF6Zim4IPiOKwIzEb5PkyWyi2dDH8sbzJdyU++vZhMp+CN+kSQs/NUASJafgMQw==}
+    engines: {node: '>=12'}
+    dependencies:
+      satellite.js: 4.1.4
     dev: false
 
   /to-regex-range/5.0.1:
@@ -3107,4 +3134,20 @@ packages:
         optional: true
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /zustand/4.1.1_react@18.2.0:
+    resolution: {integrity: sha512-h4F3WMqsZgvvaE0n3lThx4MM81Ls9xebjvrABNzf5+jb3/03YjNTSgZXeyrvXDArMeV9untvWXRw1tY+ntPYbA==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false

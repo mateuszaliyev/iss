@@ -11,7 +11,7 @@ export const Galaxy = () => {
   return (
     <>
       <mesh ref={meshRef} scale={[6.378, 6.357, 6.378]}>
-        <sphereGeometry args={[100, 32, 32]} />
+        <sphereGeometry args={[1000, 32, 32]} />
         <meshBasicMaterial map={earthMap} side={BackSide} />
       </mesh>
     </>

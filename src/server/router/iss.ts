@@ -4,6 +4,24 @@ import { env } from "@/environment/server.mjs";
 
 import { t } from "@/server/trpc";
 
+export type IssCurrentLocation = {
+  message: string;
+  position: {
+    latitude: number;
+    longitude: number;
+  };
+  timestamp: Date;
+};
+
+export type OpenNotifyIssCurrentLocation = {
+  iss_position: {
+    latitude: string;
+    longitude: string;
+  };
+  message: string;
+  timestamp: number;
+};
+
 export type IssPosition = {
   /**
    * Time (UTC).
@@ -111,14 +129,16 @@ export const issRouter = t.router({
             positionIndex < issPositions.length;
             positionIndex++
           ) {
-            const position = issPositions;
+            const previousPosition = issPositions[positionIndex - 1];
+            const position = issPositions[positionIndex];
 
-            // if (issPositions[positionIndex].epoch.getTime() - Date.now() >= 0) {
-            //   console.log(position.epoch);
-            //   return previousPosition ?? position;
-            // }
+            if (!position || !previousPosition) {
+              continue;
+            }
 
-            // previousPosition = position;
+            if (position.epoch.getTime() - Date.now() >= 0) {
+              return previousPosition;
+            }
           }
 
           throw new Error("Current position could not be found.");
@@ -128,6 +148,27 @@ export const issRouter = t.router({
             message: (error as Error).message,
           });
         }
+      }),
+      now: t.procedure.query(async (): Promise<IssCurrentLocation> => {
+        const response = await fetch(env.OPEN_NOTIFY_ISS_CURRENT_LOCATION_URL);
+
+        if (!response.ok) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Service unavailable.",
+          });
+        }
+
+        const data = (await response.json()) as OpenNotifyIssCurrentLocation;
+
+        return {
+          message: data.message,
+          position: {
+            latitude: parseFloat(data.iss_position.latitude),
+            longitude: parseFloat(data.iss_position.longitude),
+          },
+          timestamp: new Date(data.timestamp),
+        };
       }),
       today: t.procedure.query(async () => {
         try {
@@ -150,5 +191,19 @@ export const issRouter = t.router({
         }
       }),
     }),
+  }),
+  tle: t.procedure.query(async () => {
+    const response = await fetch(env.ISS_TLE_URL);
+
+    if (!response.ok) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Service unavailable.",
+      });
+    }
+
+    const tle = await response.text();
+
+    return tle.replace(/\r\n/g, "\n").trim();
   }),
 });

@@ -1,22 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { type Mesh, TextureLoader } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-const CameraController = () => {
-  const { camera, gl } = useThree();
-  useEffect(() => {
-    const controls = new OrbitControls(camera, gl.domElement);
-
-    controls.minDistance = 3;
-    controls.maxDistance = 20;
-    return () => {
-      controls.dispose();
-    };
-  }, [camera, gl]);
-  return null;
-};
 
 export const Earth = () => {
   const meshRef = useRef<Mesh>(null);
@@ -36,12 +21,11 @@ export const Earth = () => {
       return;
     }
 
-    // meshRef.current.rotation.y = -Math.PI / 2;
+    meshRef.current.rotation.y = -Math.PI / 2;
   });
 
   return (
     <>
-      <CameraController />
       <mesh ref={meshRef} scale={[6.378, 6.357, 6.378]}>
         <sphereGeometry args={[1, 100, 100]} />
         <meshStandardMaterial
