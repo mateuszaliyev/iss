@@ -1,9 +1,11 @@
 import { Space } from "@/components/space";
 
-const Home = () => (
-  <div className="h-screen">
-    <Space />
-  </div>
-);
+const Home = () => {
+  return (
+    <div className="h-screen">
+      <Space />
+    </div>
+  );
+};
 
 export default Home;
