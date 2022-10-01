@@ -5,7 +5,6 @@ import { Mesh } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { getLatLngObj } from "tle.js";
 
-import { useFocus } from "@/hooks/focus";
 import { useIss } from "@/hooks/iss";
 
 import { trpc } from "@/utilities/trpc";
@@ -15,11 +14,22 @@ export const Iss = () => {
 
   const issRef = useRef<Mesh>(null);
 
-  const { position, setPosition } = useIss();
-
-  const { focus } = useFocus();
+  const { setPosition } = useIss();
 
   const gltf = useLoader(GLTFLoader, "/assets/models/iss47.gltf");
+
+  // useEffect(() => {
+  //   if (!issRef.current) {
+  //     return;
+  //   }
+
+  //   let hasRun = false;
+
+  //   if (!hasRun) {
+  //     issRef.current.traverse((object) => (object.frustumCulled = false));
+  //     hasRun = true;
+  //   }
+  // }, []);
 
   useFrame(() => {
     if (!tle || !issRef.current) {

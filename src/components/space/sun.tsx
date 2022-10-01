@@ -34,9 +34,6 @@ export const Sun = () => {
 
     // const sunrisePos = sunCoords();
 
-    // console.log(sunPos);
-    // console.log([sunX, sunY, sunZ]);
-
     sunRef.current.position.x = sunX;
     sunRef.current.position.y = sunY;
     sunRef.current.position.z = sunZ;
