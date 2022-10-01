@@ -21,7 +21,7 @@ export const Earth = () => {
       return;
     }
 
-    meshRef.current.rotation.y = -Math.PI / 2;
+    // meshRef.current.rotation.y = -Math.PI / 2;
   });
 
   return (

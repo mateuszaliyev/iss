@@ -9,6 +9,7 @@ import { useIss } from "@/hooks/iss";
 
 import { Galaxy } from "./galaxy";
 import { Iss } from "./iss";
+import { ISSPath } from "./isspath";
 import { Sun } from "./sun";
 
 const Test = () => {
@@ -22,9 +23,9 @@ const Test = () => {
       position.z - previousPosition.z,
     ] as [number, number, number];
 
-    // camera.position.x += 100;
-    // camera.position.y += deltaTarget[0];
-    // camera.position.z += deltaTarget[0];
+    camera.position.x += deltaTarget[0];
+    camera.position.y += deltaTarget[1];
+    camera.position.z += deltaTarget[2];
   });
 
   return null;
@@ -49,7 +50,8 @@ export const Space = () => {
       <Test />
       {/* <CameraController /> */}
       <OrbitControls
-        // minDistance={0.25}10
+        maxDistance={focus === "earth" ? 30 : 0.1}
+        minDistance={focus === "earth" ? 8.5 : 0.01}
         target={
           focus === "earth" ? [0, 0, 0] : [position.x, position.y, position.z]
         }
@@ -58,7 +60,7 @@ export const Space = () => {
       <axesHelper args={[100]} />
       {/* <pointLight intensity={1} position={[10, 0, 0]} /> */}
       <Earth />
-      {/* <ISSPath /> */}
+      <ISSPath />
       <Iss />
       <Galaxy />
       <Sun />

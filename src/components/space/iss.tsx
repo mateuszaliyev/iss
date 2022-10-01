@@ -9,6 +9,59 @@ import { useIss } from "@/hooks/iss";
 
 import { trpc } from "@/utilities/trpc";
 
+// const Node = ({
+//   node,
+//   position,
+// }: {
+//   node: Object3D<Event>;
+//   position?: Vector3;
+// }) => {
+//   if (node.isGroup) {
+//     return (
+//       <>
+//         {node.children.map((child) => (
+//           <Node
+//             key={child.name}
+//             node={child}
+//             // position={node.position.applyMatrix4(node.matrix)}
+//             position={node.position}
+//           />
+//         ))}
+//       </>
+//     );
+//   }
+
+//   return (
+//     <mesh
+//       castShadow
+//       geometry={node.geometry}
+//       material={node.material}
+//       position={position}
+//       receiveShadow
+//     />
+//   );
+// };
+
+// export const Model = () => {
+//   const group = useRef<Group>(null);
+//   const { materials, nodes } = useGLTF("/assets/models/iss47.gltf");
+
+//   return (
+//     <group dispose={null} ref={group} scale={[0.001, 0.001, 0.001]}>
+//       {Object.entries(nodes).map(([name, node]) => (
+//         <Node key={name} node={node} />
+//       ))}{" "}
+//       <primitive
+//         object={gltf.scene}
+//         ref={issRef}
+//         scale={[0.001, 0.001, 0.001]}
+//       />
+//     </group>
+//   );
+// };
+
+// useGLTF.preload("/assets/models/iss47.gltf");
+
 export const Iss = () => {
   const { data: tle } = trpc.iss.tle.useQuery();
 
@@ -17,6 +70,8 @@ export const Iss = () => {
   const { setPosition } = useIss();
 
   const gltf = useLoader(GLTFLoader, "/assets/models/iss47.gltf");
+
+  // const obj = useLoader(OBJLoader, "/assets/models/untitled.obj");
 
   // useEffect(() => {
   //   if (!issRef.current) {
@@ -41,11 +96,35 @@ export const Iss = () => {
     const distanceFromEarthCenter = 6378 + 400;
 
     const x =
-      (distanceFromEarthCenter * Math.sin((longitude * Math.PI) / 180)) / 1000;
+      (distanceFromEarthCenter *
+        Math.cos((latitude * Math.PI) / 180) *
+        Math.cos((longitude * Math.PI) / 180)) /
+      1000;
+
     const y =
-      (distanceFromEarthCenter * Math.sin((latitude * Math.PI) / 180)) / 1000;
+      -(
+        distanceFromEarthCenter *
+        Math.cos((latitude * Math.PI) / 180) *
+        Math.sin((longitude * Math.PI) / 180)
+      ) / 1000;
+
     const z =
-      (distanceFromEarthCenter * Math.cos((longitude * Math.PI) / 180)) / 1000;
+      (distanceFromEarthCenter * Math.sin((latitude * Math.PI) / 180)) / 1000;
+
+    // const x =
+    //   (distanceFromEarthCenter *
+    //     Math.cos((latitude * Math.PI) / 180) *
+    //     Math.cos((longitude * Math.PI) / 180)) /
+    //   1000;
+
+    // const y =
+    //   (distanceFromEarthCenter *
+    //     Math.cos((latitude * Math.PI) / 180) *
+    //     Math.sin((longitude * Math.PI) / 180)) /
+    //   1000;
+
+    // const z =
+    //   (distanceFromEarthCenter * Math.sin((latitude * Math.PI) / 180)) / 1000;
 
     setPosition({ x, y, z });
 
@@ -54,11 +133,13 @@ export const Iss = () => {
 
   return (
     <Suspense fallback={null}>
+      {/* <Model /> */}
       <primitive
         object={gltf.scene}
         ref={issRef}
         scale={[0.001, 0.001, 0.001]}
       />
+      {/* <primitive object={obj} scale={[0.001, 0.001, 0.001]} /> */}
     </Suspense>
   );
 };
