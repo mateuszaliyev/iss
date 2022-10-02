@@ -31,8 +31,8 @@ const HistoryPage = () => {
         <HistoryItem src="/assets/images/columbus.gif" />
         <HistoryItem src="/assets/images/kibo.gif" />
         <HistoryItem>
-          11 Marca 2008 roku japoński moduł ekperymentalny współpracujący z ISS
-          wprowadził na orbite opracowany przez JAXA moduł o nazwie{" "}
+          On March 11, 2008, the Japanese experimental module cooperating with
+          the ISS introduced a module developed by JAXA into orbit called{" "}
           <strong>Kibō</strong>.
         </HistoryItem>
       </main>
