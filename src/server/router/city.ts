@@ -32,31 +32,32 @@ export const cityRouter = t.router({
           longitude: z.number(),
         })
       )
-      .query(async ({ input: { latitude, longitude } }): Promise<City> => {
-        const response = await fetch(
-          `${env.OPEN_WEATHER_API_URL}?lat=${latitude}&lon=${longitude}&appid=${env.OPEN_WEATHER_API_KEY}`
-        );
+      .query(
+        async ({ input: { latitude, longitude } }): Promise<City | null> => {
+          const response = await fetch(
+            `${env.OPEN_WEATHER_API_URL}?lat=${latitude}&lon=${longitude}&appid=${env.OPEN_WEATHER_API_KEY}`
+          );
 
-        if (!response.ok) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Service unavailable.",
-          });
+          if (!response.ok) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Service unavailable.",
+            });
+          }
+
+          const [city] = (await response.json()) as OpenWeatherApiCity[];
+
+          console.log(city);
+
+          if (!city) {
+            return null;
+          }
+
+          return {
+            ...city,
+            localNames: city.local_names,
+          };
         }
-
-        const [city] = (await response.json()) as OpenWeatherApiCity[];
-
-        if (!city) {
-          throw new TRPCError({
-            code: "CONFLICT",
-            message: "No cities in given location.",
-          });
-        }
-
-        return {
-          ...city,
-          localNames: city.local_names,
-        };
-      }),
+      ),
   }),
 });

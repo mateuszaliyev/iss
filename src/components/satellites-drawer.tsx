@@ -47,14 +47,14 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
     formState: { errors },
     handleSubmit,
     register,
-    watch,
+    reset,
   } = useForm<z.infer<typeof addSatelliteSchema>>({
     delayError: 1000,
     mode: "onChange",
     resolver: zodResolver(addSatelliteSchema),
   });
 
-  const { addSatellite, satellites } = useSatellites();
+  const { addSatellite, removeSatellite, satellites } = useSatellites();
 
   const [form, setForm] = useState(false);
 
@@ -66,7 +66,7 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
 
   return (
     <Drawer open={open}>
-      <h2 className="text-center text-2xl">Manage Satellites</h2>
+      <h2 className="pb-6 text-center text-2xl">Manage Satellites</h2>
       {satellites.length === 0 && !form ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-8 py-4 pb-32">
           <MdSensorsOff className="h-32 w-32 fill-white/25" />
@@ -79,11 +79,21 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
         </div>
       ) : !form ? (
         <>
-          <ul className="divide-y divide-white/25">
+          <ul className="divide-y divide-white/10">
             {satellites.map((satellite) => (
-              <li className="flex p-4" key={satellite.tle}>
+              <li
+                className="flex select-none items-center gap-4 p-4 transition-colors hover:bg-white/10"
+                key={satellite.id}
+              >
+                <span
+                  className="block h-4 w-4 rounded-full"
+                  style={{ backgroundColor: satellite.color }}
+                ></span>
                 <span>{getSatelliteName(satellite.tle)}</span>
-                <button className="ml-auto block transition-colors hover:text-red-500">
+                <button
+                  className="ml-auto block transition-colors hover:text-red-500"
+                  onClick={() => removeSatellite(satellite.id)}
+                >
                   <MdDeleteForever className="h-5 w-5" />
                 </button>
               </li>
@@ -104,12 +114,13 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
             event.preventDefault();
 
             void handleSubmit(({ color, tle }) => {
-              addSatellite({
+              void addSatellite({
                 color,
                 tle,
               });
 
               setForm(false);
+              reset();
             })(event);
           }}
         >

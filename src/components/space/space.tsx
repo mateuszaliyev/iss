@@ -1,43 +1,52 @@
+import { Fragment } from "react";
+
 import { OrbitControls } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
-import { useFrame } from "@react-three/fiber";
-import { Vector3 } from "three";
+import { Canvas } from "@react-three/fiber";
 
 import { Earth } from "@/components/space/earth";
 
 import { useFocus } from "@/hooks/focus";
 import { useIss } from "@/hooks/iss";
+import { useSatellites } from "@/hooks/satellites";
+
+import { trpc } from "@/utilities/trpc";
 
 import { Galaxy } from "./galaxy";
-import { GenericSatelite } from "./generic-satelite";
 import { Iss } from "./iss";
-import { IssPaths } from "./iss-path";
+import { Satellite } from "./satellite";
 import { SatellitesAboveLocation } from "./satellites-above-location";
 import { Sun } from "./sun";
+import { Trajectory } from "./trajectory";
 
-const Test = () => {
-  const { position, previousPosition } = useIss();
-  const { camera } = useThree();
+// const Test = () => {
+//   const { position, previousPosition } = useIss();
+//   const { camera } = useThree();
 
-  useFrame(() => {
-    const deltaTarget = [
-      position.x - previousPosition.x,
-      position.y - previousPosition.y,
-      position.z - previousPosition.z,
-    ] as [number, number, number];
+//   useFrame(() => {
+//     const deltaTarget = [
+//       position.x - previousPosition.x,
+//       position.y - previousPosition.y,
+//       position.z - previousPosition.z,
+//     ] as [number, number, number];
 
-    camera.position.x += deltaTarget[0];
-    camera.position.y += deltaTarget[1];
-    camera.position.z += deltaTarget[2];
-  });
+//     // console.log(deltaTarget);
 
-  return null;
-};
+//     // camera.position.x += deltaTarget[0];
+//     // camera.position.y += deltaTarget[1];
+//     // camera.position.z += deltaTarget[2];
+//   });
+
+//   return null;
+// };
 
 export const Space = () => {
   const { focus } = useFocus();
 
   const { position } = useIss();
+
+  const satellites = useSatellites((state) => state.satellites);
+
+  const { data: issTle } = trpc.iss.tle.useQuery();
 
   const tmpTle = `STARLINK-1015           
   1 44721U 19074J   22274.41408644  .00001284  00000+0  10508-3 0  9998
@@ -55,7 +64,7 @@ export const Space = () => {
       }}
     >
       <SatellitesAboveLocation />
-      <Test />
+      {/* <Test /> */}
       <OrbitControls
         maxDistance={focus === "earth" ? 30 : 0.1}
         minDistance={focus === "earth" ? 7.5 : 0.01}
@@ -64,18 +73,42 @@ export const Space = () => {
         }
       />
       <ambientLight intensity={1.0} />
-      <axesHelper args={[100]} />
+      {/* <axesHelper args={[100]} /> */}
       {/* <pointLight intensity={1} position={[10, 0, 0]} /> */}
       <Earth />
-      {focus === "earth" && <IssPaths />}
+      {focus === "earth" && issTle && (
+        // <IssPaths
+        //   beginningDate={new Date().getTime() - 100000}
+        //   endDate={new Date().getTime() + 100000}
+        // />
+        <Trajectory
+          beginningDate={new Date().getTime() - 4000000}
+          color={0xffffff}
+          endDate={new Date().getTime() + 4000000}
+          key={"ISS"}
+          tle={issTle}
+        />
+      )}
       <Iss />
+      {/* {issTle && (
+        <IssPaths
+          beginningDate={new Date().getTime() - 10000}
+          endDate={new Date().getTime() + 10000}
+        />
+      )} */}
       <Galaxy />
       <Sun />
-      <GenericSatelite
-        color={0xe0a0a0}
-        position={new Vector3(10, 0, 0)}
-        tle={tmpTle}
-      />
+      {satellites.map((satellite) => (
+        <Fragment key={satellite.id}>
+          <Satellite color={satellite.color} tle={satellite.tle} />
+          <Trajectory
+            beginningDate={new Date().getTime() - 4000000}
+            color={satellite.color}
+            endDate={new Date().getTime() + 4000000}
+            tle={satellite.tle}
+          />
+        </Fragment>
+      ))}
       <SatellitesAboveLocation />
     </Canvas>
   );

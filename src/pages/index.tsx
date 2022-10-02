@@ -2,6 +2,8 @@ import { useState } from "react";
 import { MdClose, MdFormatListBulleted, MdPublic } from "react-icons/md";
 
 import { ButtonSecondary } from "@/components/button/secondary";
+import { DateDrawer } from "@/components/date-drawer";
+import { ManageHistoryIcon } from "@/components/icons/manage-history";
 import { SatelliteIcon } from "@/components/icons/satellite";
 import { Navbar } from "@/components/navbar";
 import { SatellitesDrawer } from "@/components/satellites-drawer";
@@ -12,7 +14,8 @@ import { useFocus } from "@/hooks/focus";
 const Home = () => {
   const { focus, toggleFocus } = useFocus();
 
-  const [open, setOpen] = useState(false);
+  const [dateDrawerOpen, setDateDrawerOpen] = useState(false);
+  const [satellitesDrawerOpen, setSatellitesDrawerOpen] = useState(false);
 
   return (
     <>
@@ -32,24 +35,43 @@ const Home = () => {
         >
           Focus on {focus === "earth" ? "ISS" : "Earth"}
         </ButtonSecondary>
-        <ButtonSecondary
-          className="ml-auto"
-          icon={
-            open ? (
-              <MdClose className="h-5 w-5" />
-            ) : (
-              <MdFormatListBulleted className="h-5 w-5" />
-            )
-          }
-          onClick={() => setOpen((open) => !open)}
-        >
-          {open ? "Close" : "Manage Satellites"}
-        </ButtonSecondary>
+        {!dateDrawerOpen && (
+          <ButtonSecondary
+            className="ml-auto"
+            icon={<ManageHistoryIcon className="h-5 w-5 fill-current" />}
+            onClick={() => setDateDrawerOpen(true)}
+          >
+            Pick Date
+          </ButtonSecondary>
+        )}
+        {!satellitesDrawerOpen && (
+          <ButtonSecondary
+            icon={<MdFormatListBulleted className="h-5 w-5" />}
+            onClick={() => {
+              setSatellitesDrawerOpen(true);
+            }}
+          >
+            Manage Satellites
+          </ButtonSecondary>
+        )}
+        {!dateDrawerOpen ||
+          (!satellitesDrawerOpen && (
+            <ButtonSecondary
+              icon={<MdClose className="h-5 w-5" />}
+              onClick={() => {
+                setDateDrawerOpen(false);
+                setSatellitesDrawerOpen(false);
+              }}
+            >
+              Close
+            </ButtonSecondary>
+          ))}
       </Navbar>
       <main className="relative h-screen overflow-y-hidden">
         <Space />
       </main>
-      <SatellitesDrawer open={open} />
+      <DateDrawer open={dateDrawerOpen} />
+      <SatellitesDrawer open={satellitesDrawerOpen} />
     </>
   );
 };

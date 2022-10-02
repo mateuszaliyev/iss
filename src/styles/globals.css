@@ -3,6 +3,222 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 900;
+    src: url("/assets/fonts/barlow/Barlow-Black.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 900;
+    src: url("/assets/fonts/barlow/Barlow-BlackItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 700;
+    src: url("/assets/fonts/barlow/Barlow-Bold.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 700;
+    src: url("/assets/fonts/barlow/Barlow-BoldItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 800;
+    src: url("/assets/fonts/barlow/Barlow-ExtraBold.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 800;
+    src: url("/assets/fonts/barlow/Barlow-ExtraBoldItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 400;
+    src: url("/assets/fonts/barlow/Barlow-Italic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 300;
+    src: url("/assets/fonts/barlow/Barlow-Light.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 300;
+    src: url("/assets/fonts/barlow/Barlow-LightItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 500;
+    src: url("/assets/fonts/barlow/Barlow-Medium.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 500;
+    src: url("/assets/fonts/barlow/Barlow-MediumItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 400;
+    src: url("/assets/fonts/barlow/Barlow-Regular.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 600;
+    src: url("/assets/fonts/barlow/Barlow-SemiBold.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 600;
+    src: url("/assets/fonts/barlow/Barlow-SemiBoldItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: normal;
+    font-weight: 100;
+    src: url("/assets/fonts/barlow/Barlow-Thin.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: Barlow;
+    font-style: italic;
+    font-weight: 100;
+    src: url("/assets/fonts/barlow/Barlow-ThinItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: normal;
+    font-weight: 900;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-Black.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: normal;
+    font-weight: 700;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-Bold.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: italic;
+    font-weight: 700;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-BoldItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: normal;
+    font-weight: 200;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-ExtraLight.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: italic;
+    font-weight: 200;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-ExtraLight.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: talic;
+    font-weight: 400;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-Italic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: normal;
+    font-weight: 300;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-Light.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: italic;
+    font-weight: 300;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-LightItalic.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: normal;
+    font-weight: 400;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-Regular.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: normal;
+    font-weight: 600;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-SemiBold.ttf");
+  }
+
+  @font-face {
+    font-display: fallback;
+    font-family: "Titillium Web";
+    font-style: italic;
+    font-weight: 600;
+    src: url("/assets/fonts/titillium-web/TitilliumWeb-SemiBoldItalic.ttf");
+  }
+
   #__next {
     @apply contents;
   }

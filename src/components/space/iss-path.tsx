@@ -35,12 +35,17 @@ const IssPath = ({
       position={[x, y, z]}
     >
       <sphereGeometry args={[0.02, 50, 50]} />
-      <meshBasicMaterial color={0xff0000} />
+      <meshBasicMaterial color={0xffffff} />
     </mesh>
   );
 };
 
-export const IssPaths = () => {
+export type IssPathsProps = {
+  beginningDate: number;
+  endDate: number;
+};
+
+export const IssPaths = ({ beginningDate, endDate }: IssPathsProps) => {
   const { data: tle } = trpc.iss.tle.useQuery();
 
   const points = useMemo(() => {
@@ -56,11 +61,8 @@ export const IssPaths = () => {
       return points;
     }
 
-    for (let i = -300; i <= 300; i += 5) {
-      const { latitude, longitude, x, y, z } = getCoordinatesFromTle(
-        tle,
-        Date.now() + i * 10000
-      );
+    for (let i = beginningDate; i <= endDate; i += 50000) {
+      const { latitude, longitude, x, y, z } = getCoordinatesFromTle(tle, i);
 
       points.push({ latitude, longitude, x, y, z });
     }
