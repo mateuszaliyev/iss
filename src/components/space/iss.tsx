@@ -69,7 +69,7 @@ export const Iss = () => {
   const { setPosition } = useIss();
   const { camera } = useThree();
   const { focus } = useFocus();
-  const timestamp = useTimestamp((state) => state.timestamp);
+  const { setTimestamp, timestamp } = useTimestamp();
 
   const gltf = useLoader(GLTFLoader, "/assets/models/turbo_iss.gltf");
 
@@ -89,6 +89,8 @@ export const Iss = () => {
   // }, []);
 
   useFrame(() => {
+    setTimestamp(Date.now());
+
     if (!tle || !issRef.current || !textRef.current) {
       return;
     }
