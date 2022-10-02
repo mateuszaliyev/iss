@@ -7,6 +7,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 import { useFocus } from "@/hooks/focus";
 import { useIss } from "@/hooks/iss";
+import { useTimestamp } from "@/hooks/timestamp";
 
 import { getCoordinatesFromTle } from "@/utilities/get-coordinates-from-tle";
 import { trpc } from "@/utilities/trpc";
@@ -68,6 +69,7 @@ export const Iss = () => {
   const { setPosition } = useIss();
   const { camera } = useThree();
   const { focus } = useFocus();
+  const timestamp = useTimestamp((state) => state.timestamp);
 
   const gltf = useLoader(GLTFLoader, "/assets/models/turbo_iss.gltf");
 
@@ -91,7 +93,7 @@ export const Iss = () => {
       return;
     }
 
-    const { x, y, z } = getCoordinatesFromTle(tle, Date.now());
+    const { x, y, z } = getCoordinatesFromTle(tle, timestamp);
 
     setPosition({ x, y, z });
 
@@ -112,6 +114,7 @@ export const Iss = () => {
       <primitive
         object={gltf.scene}
         ref={issRef}
+        // rotation={new Euler(0, Math.PI / 2, 0)}
         scale={[0.001, 0.001, 0.001]}
       />
       {/* <primitive object={obj} scale={[0.001, 0.001, 0.001]} /> */}

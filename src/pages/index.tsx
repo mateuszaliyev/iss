@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { MdClose, MdFormatListBulleted, MdPublic } from "react-icons/md";
 
+import { clsx } from "clsx";
+
 import { ButtonSecondary } from "@/components/button/secondary";
 import { DateDrawer } from "@/components/date-drawer";
 import { ManageHistoryIcon } from "@/components/icons/manage-history";
@@ -35,7 +37,7 @@ const Home = () => {
         >
           Focus on {focus === "earth" ? "ISS" : "Earth"}
         </ButtonSecondary>
-        {!dateDrawerOpen && (
+        {!dateDrawerOpen && !satellitesDrawerOpen && (
           <ButtonSecondary
             className="ml-auto"
             icon={<ManageHistoryIcon className="h-5 w-5 fill-current" />}
@@ -44,7 +46,7 @@ const Home = () => {
             Pick Date
           </ButtonSecondary>
         )}
-        {!satellitesDrawerOpen && (
+        {!dateDrawerOpen && !satellitesDrawerOpen && (
           <ButtonSecondary
             icon={<MdFormatListBulleted className="h-5 w-5" />}
             onClick={() => {
@@ -54,18 +56,20 @@ const Home = () => {
             Manage Satellites
           </ButtonSecondary>
         )}
-        {!dateDrawerOpen ||
-          (!satellitesDrawerOpen && (
-            <ButtonSecondary
-              icon={<MdClose className="h-5 w-5" />}
-              onClick={() => {
-                setDateDrawerOpen(false);
-                setSatellitesDrawerOpen(false);
-              }}
-            >
-              Close
-            </ButtonSecondary>
-          ))}
+        {(dateDrawerOpen || satellitesDrawerOpen) && (
+          <ButtonSecondary
+            className={clsx(
+              (dateDrawerOpen || satellitesDrawerOpen) && "ml-auto"
+            )}
+            icon={<MdClose className="h-5 w-5" />}
+            onClick={() => {
+              setDateDrawerOpen(false);
+              setSatellitesDrawerOpen(false);
+            }}
+          >
+            Close
+          </ButtonSecondary>
+        )}
       </Navbar>
       <main className="relative h-screen overflow-y-hidden">
         <Space />

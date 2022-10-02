@@ -2,9 +2,9 @@ import { forwardRef, InputHTMLAttributes } from "react";
 
 import { clsx } from "clsx";
 
-export type InputColorProps = InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
-export const InputColor = forwardRef<HTMLInputElement, InputColorProps>(
+export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => (
     <div className="rounded bg-white/10 p-2">
       <input

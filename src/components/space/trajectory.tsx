@@ -5,6 +5,8 @@ import { Color, useFrame, useThree } from "@react-three/fiber";
 import { Mesh } from "three";
 import { getSatelliteName } from "tle.js";
 
+import { useTimestamp } from "@/hooks/timestamp";
+
 import { getCoordinatesFromTle } from "@/utilities/get-coordinates-from-tle";
 
 export type TrajectoryProps = {
@@ -31,6 +33,8 @@ export const Trajectory = ({
   endDate,
   tle,
 }: TrajectoryProps) => {
+  const currentTimestamp = useTimestamp((state) => state.timestamp);
+
   const points = useMemo(() => {
     const points: {
       latitude: number;
@@ -47,7 +51,7 @@ export const Trajectory = ({
       timestamp <= endDate;
       timestamp += 50000
     ) {
-      if (Math.abs(Date.now() - timestamp) <= 75000) {
+      if (Math.abs(currentTimestamp - timestamp) <= 75000) {
         continue;
       }
 
@@ -62,7 +66,7 @@ export const Trajectory = ({
     }
 
     return points;
-  }, [beginningDate, endDate, tle]);
+  }, [beginningDate, currentTimestamp, endDate, tle]);
 
   return (
     <group>

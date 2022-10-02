@@ -10,7 +10,7 @@ import { z } from "zod";
 import { ButtonDanger } from "@/components/button/danger";
 import { ButtonPrimary } from "@/components/button/primary";
 import { Drawer } from "@/components/drawer";
-import { InputColor } from "@/components/input/color";
+import { Input } from "@/components/input";
 import { Label } from "@/components/label";
 import { Textarea } from "@/components/textarea";
 
@@ -135,7 +135,7 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
             />
             <Error>{errors.tle?.message}</Error>
             <Label htmlFor="color">Color</Label>
-            <InputColor
+            <Input
               defaultValue="#ffffff"
               id="color"
               required

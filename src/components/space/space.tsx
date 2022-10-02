@@ -8,6 +8,7 @@ import { Earth } from "@/components/space/earth";
 import { useFocus } from "@/hooks/focus";
 import { useIss } from "@/hooks/iss";
 import { useSatellites } from "@/hooks/satellites";
+import { useTimestamp } from "@/hooks/timestamp";
 
 import { trpc } from "@/utilities/trpc";
 
@@ -46,6 +47,8 @@ export const Space = () => {
 
   const satellites = useSatellites((state) => state.satellites);
 
+  const timestamp = useTimestamp((state) => state.timestamp);
+
   const { data: issTle } = trpc.iss.tle.useQuery();
 
   const tmpTle = `STARLINK-1015           
@@ -82,9 +85,9 @@ export const Space = () => {
         //   endDate={new Date().getTime() + 100000}
         // />
         <Trajectory
-          beginningDate={new Date().getTime() - 4000000}
+          beginningDate={timestamp - 4000000}
           color={0xffffff}
-          endDate={new Date().getTime() + 4000000}
+          endDate={timestamp + 4000000}
           key={"ISS"}
           tle={issTle}
         />
@@ -102,9 +105,9 @@ export const Space = () => {
         <Fragment key={satellite.id}>
           <Satellite color={satellite.color} tle={satellite.tle} />
           <Trajectory
-            beginningDate={new Date().getTime() - 4000000}
+            beginningDate={timestamp - 4000000}
             color={satellite.color}
-            endDate={new Date().getTime() + 4000000}
+            endDate={timestamp + 4000000}
             tle={satellite.tle}
           />
         </Fragment>
