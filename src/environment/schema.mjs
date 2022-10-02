@@ -9,10 +9,14 @@ export const serverSchema = z.object({
   DATABASE_URL: z.string().url(),
   ISS_TLE_URL: z.string().url(),
   ISS_TRAJECTORY_DATA_URL: z.string().url(),
+  N2YO_API_KEY: z.string(),
+  N2YO_API_URL: z.string().url(),
   NEXTAUTH_SECRET: z.string(),
   NEXTAUTH_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "production", "test"]),
   OPEN_NOTIFY_ISS_CURRENT_LOCATION_URL: z.string().url(),
+  OPEN_WEATHER_API_KEY: z.string(),
+  OPEN_WEATHER_API_URL: z.string().url(),
 });
 
 /**
