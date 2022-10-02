@@ -9,7 +9,7 @@ import { useIss } from "@/hooks/iss";
 
 import { Galaxy } from "./galaxy";
 import { Iss } from "./iss";
-import { ISSPath } from "./isspath";
+import { IssPath } from "./iss-path";
 import { Sun } from "./sun";
 
 const Test = () => {
@@ -48,7 +48,6 @@ export const Space = () => {
       }}
     >
       <Test />
-      {/* <CameraController /> */}
       <OrbitControls
         maxDistance={focus === "earth" ? 30 : 0.1}
         minDistance={focus === "earth" ? 8.5 : 0.01}
@@ -60,7 +59,7 @@ export const Space = () => {
       <axesHelper args={[100]} />
       {/* <pointLight intensity={1} position={[10, 0, 0]} /> */}
       <Earth />
-      <ISSPath />
+      <IssPath />
       <Iss />
       <Galaxy />
       <Sun />
