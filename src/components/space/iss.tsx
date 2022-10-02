@@ -93,7 +93,7 @@ export const Iss = () => {
 
     const { x, y, z } = getCoordinatesFromTle(tle, Date.now());
 
-    // setPosition({ x, y, z });
+    setPosition({ x, y, z });
 
     // modelRef.current.position.set(x, y, z);
     issRef.current.position.set(x, y, z);
