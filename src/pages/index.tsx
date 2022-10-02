@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { MdClose, MdFormatListBulleted, MdPublic } from "react-icons/md";
+import {
+  MdClose,
+  MdFormatListBulleted,
+  MdHistoryToggleOff,
+  MdPublic,
+} from "react-icons/md";
+
+import Link from "next/link";
 
 import { clsx } from "clsx";
 
@@ -37,6 +44,13 @@ const Home = () => {
         >
           Focus on {focus === "earth" ? "ISS" : "Earth"}
         </ButtonSecondary>
+        <Link
+          className="pointer flex items-center gap-2 rounded-md text-base leading-10 transition-colors hover:text-gray-400"
+          href="/history"
+        >
+          <MdHistoryToggleOff className="h-5 w-5" />
+          History
+        </Link>
         {!dateDrawerOpen && !satellitesDrawerOpen && (
           <ButtonSecondary
             className="ml-auto"

@@ -1,7 +1,7 @@
 import { HistoryItem } from "@/components/historyitem";
 import { Navbar } from "@/components/navbar";
 
-const Marioooo = () => {
+const HistoryPage = () => {
   return (
     <div className="bg-white">
       <Navbar>
@@ -14,33 +14,30 @@ const Marioooo = () => {
       </header>
       <main className="flex h-screen flex-wrap bg-white">
         <HistoryItem>
-          Międzynarodowa Stacja Kosmiczna została wprowadzona do przestrzeni
-          kosmicznej 20 listopada 1998. Jej pierwszym wystrzelonym elementem był
-          moduł
-          <strong> Zarya</strong>.
+          The International Space Station was launched into space on November
+          20, 1998. Its first launch was the <strong>Zarya</strong> module.
         </HistoryItem>
         <HistoryItem src="/assets/images/iss1998.gif" />
         <HistoryItem src="/assets/images/node.jpg" />
         <HistoryItem>
-          4 grudnia 1998 zdecydowano na wypuszczenie do ISS pierwszego modułu
-          zbudowanego przez Stany Zjednoczone o nazwie
-          <strong> Unity Node 1</strong>.
+          On December 4, 1998, it was decided to launch the first US-built
+          module called <strong>Unity Node 1</strong> to the ISS.
         </HistoryItem>
         <HistoryItem>
-          Rok 2008 był przełomowy dla Europeskiej Agencji Kosmicznej, z tego
-          względu, że 7 lutego 2008 roku dołączono do Międzynarodowej Stacji
-          Kosmicznej laboratorium naukowe <strong> Columbus</strong>.
+          2008 was a landmark year for the Eurasian Space Agency, with the{" "}
+          <strong>Columbus</strong> science laboratory attached to the
+          International Space Station on February 7, 2008.
         </HistoryItem>
         <HistoryItem src="/assets/images/columbus.gif" />
         <HistoryItem src="/assets/images/kibo.gif" />
         <HistoryItem>
           11 Marca 2008 roku japoński moduł ekperymentalny współpracujący z ISS
-          wprowadził na orbite opracowany przez JAXA moduł o nazwie
-          <strong> Kibō</strong>.
+          wprowadził na orbite opracowany przez JAXA moduł o nazwie{" "}
+          <strong>Kibō</strong>.
         </HistoryItem>
       </main>
     </div>
   );
 };
 
-export default Marioooo;
+export default HistoryPage;
