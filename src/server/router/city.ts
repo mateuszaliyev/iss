@@ -47,8 +47,6 @@ export const cityRouter = t.router({
 
           const [city] = (await response.json()) as OpenWeatherApiCity[];
 
-          console.log(city);
-
           if (!city) {
             return null;
           }

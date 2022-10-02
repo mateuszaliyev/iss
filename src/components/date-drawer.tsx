@@ -23,8 +23,6 @@ export const DateDrawer = ({ open }: DateDrawerProps) => {
     emptyRef.current && autoAnimate(emptyRef.current);
   }, []);
 
-  console.log(new Date(timestamp).toISOString().substring(0, 16));
-
   return (
     <Drawer open={open}>
       <h2 className="pb-6 text-center text-2xl">Pick a date</h2>

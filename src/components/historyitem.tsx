@@ -18,7 +18,7 @@ export const HistoryItem = ({ className, ...props }: HistoryItemProps) => {
         )}
       >
         <Image
-          alt="dupa"
+          alt=""
           className="rounded-xl"
           layout="fill"
           src={props.src}

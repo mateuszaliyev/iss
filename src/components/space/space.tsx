@@ -30,8 +30,6 @@ import { Trajectory } from "./trajectory";
 //       position.z - previousPosition.z,
 //     ] as [number, number, number];
 
-//     // console.log(deltaTarget);
-
 //     // camera.position.x += deltaTarget[0];
 //     // camera.position.y += deltaTarget[1];
 //     // camera.position.z += deltaTarget[2];
