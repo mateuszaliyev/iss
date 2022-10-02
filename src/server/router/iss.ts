@@ -4,6 +4,24 @@ import { env } from "@/environment/server.mjs";
 
 import { t } from "@/server/trpc";
 
+export type IssCurrentLocation = {
+  message: string;
+  position: {
+    latitude: number;
+    longitude: number;
+  };
+  timestamp: Date;
+};
+
+export type OpenNotifyIssCurrentLocation = {
+  iss_position: {
+    latitude: string;
+    longitude: string;
+  };
+  message: string;
+  timestamp: number;
+};
+
 export type IssPosition = {
   /**
    * Time (UTC).
@@ -91,37 +109,101 @@ export const getIssPositionsFromText = async (): Promise<IssPosition[]> => {
 
 export const issRouter = t.router({
   position: t.router({
-    getAll: t.procedure.query(async () => {
-      try {
-        return await getIssPositionsFromText();
-      } catch (error) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: (error as Error).message,
-        });
-      }
-    }),
-    getCurrent: t.procedure.query(async () => {
-      try {
-        const issPositions = await getIssPositionsFromText();
+    get: t.router({
+      all: t.procedure.query(async () => {
+        try {
+          return await getIssPositionsFromText();
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: (error as Error).message,
+          });
+        }
+      }),
+      current: t.procedure.query(async () => {
+        try {
+          const issPositions = await getIssPositionsFromText();
 
-        let previousPosition: IssPosition | null = null;
+          for (
+            let positionIndex = 0;
+            positionIndex < issPositions.length;
+            positionIndex++
+          ) {
+            const previousPosition = issPositions[positionIndex - 1];
+            const position = issPositions[positionIndex];
 
-        for (const position of issPositions) {
-          if (position.epoch.getTime() - Date.now() >= 0) {
-            return previousPosition ?? position;
+            if (!position || !previousPosition) {
+              continue;
+            }
+
+            if (position.epoch.getTime() - Date.now() >= 0) {
+              return previousPosition;
+            }
           }
 
-          previousPosition = position;
+          throw new Error("Current position could not be found.");
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: (error as Error).message,
+          });
+        }
+      }),
+      now: t.procedure.query(async (): Promise<IssCurrentLocation> => {
+        const response = await fetch(env.OPEN_NOTIFY_ISS_CURRENT_LOCATION_URL);
+
+        if (!response.ok) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Service unavailable.",
+          });
         }
 
-        throw new Error("Current position could not be found.");
-      } catch (error) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: (error as Error).message,
-        });
-      }
+        const data = (await response.json()) as OpenNotifyIssCurrentLocation;
+
+        return {
+          message: data.message,
+          position: {
+            latitude: parseFloat(data.iss_position.latitude),
+            longitude: parseFloat(data.iss_position.longitude),
+          },
+          timestamp: new Date(data.timestamp),
+        };
+      }),
+      today: t.procedure.query(async () => {
+        try {
+          const issPositions = await getIssPositionsFromText();
+
+          return issPositions.filter((position) => {
+            const now = new Date();
+
+            return (
+              position.epoch.getDate() === now.getDate() &&
+              position.epoch.getMonth() === now.getMonth() &&
+              position.epoch.getFullYear() === now.getFullYear()
+            );
+          });
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: (error as Error).message,
+          });
+        }
+      }),
     }),
+  }),
+  tle: t.procedure.query(async () => {
+    const response = await fetch(env.ISS_TLE_URL);
+
+    if (!response.ok) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Service unavailable.",
+      });
+    }
+
+    const tle = await response.text();
+
+    return tle.replace(/\r\n/g, "\n").trim();
   }),
 });
