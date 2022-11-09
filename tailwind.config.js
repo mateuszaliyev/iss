@@ -9,9 +9,13 @@ const tailwindCssConfig = {
   theme: {
     extend: {
       fontFamily: {
-        barlow: ["Barlow", ...defaultTheme.fontFamily.sans],
-        "titillium-web": ["Titillium Web", ...defaultTheme.fontFamily.sans],
+        sans: ["var(--font-titillium-web)", ...defaultTheme.fontFamily.mono],
       },
+    },
+    zIndex: {
+      drawer: "3",
+      loader: "1",
+      navbar: "2",
     },
   },
 };

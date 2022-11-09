@@ -1,14 +1,16 @@
 // @ts-check
 
-/* eslint-disable-next-line unused-imports/no-unused-imports */
-import { env } from "./src/environment/server.mjs";
+/**
+ * Run `build` or `dev` with `SKIP_ENVIRONMENT_VALIDATION` to skip environment
+ * validation. This is especially useful for Docker builds.
+ */
+!process.env.SKIP_ENVIRONMENT_VALIDATION &&
+  (await import("./src/environment/server.mjs"));
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   experimental: {
-    browsersListForSwc: true,
     legacyBrowsers: false,
-    newNextLinkBehavior: true,
   },
   headers: async () => [
     {
@@ -69,7 +71,6 @@ const nextConfig = {
   },
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
 };
 
 export default nextConfig;

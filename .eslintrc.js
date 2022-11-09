@@ -14,7 +14,8 @@ const eslintConfig = {
   root: true,
   rules: {
     "@next/next/no-html-link-for-pages": "off",
-    "react/display-name": ["off"],
+    "@next/next/no-img-element": "off",
+    "react/display-name": "off",
     "react/jsx-sort-props": [
       "warn",
       {

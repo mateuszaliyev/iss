@@ -1,105 +1,39 @@
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 
-import { Text } from "@react-three/drei";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
-import { Group, Mesh } from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { Text, useGLTF } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Mesh } from "three";
 
 import { useFocus } from "@/hooks/focus";
 import { useIss } from "@/hooks/iss";
-import { useTimestamp } from "@/hooks/timestamp";
+import { useTime } from "@/hooks/time";
+
+import { trpc } from "@/trpc";
 
 import { getCoordinatesFromTle } from "@/utilities/get-coordinates-from-tle";
-import { trpc } from "@/utilities/trpc";
-
-// const Node = ({
-//   node,
-//   position,
-// }: {
-//   node: Object3D<Event>;
-//   position?: Vector3;
-// }) => {
-//   if (node.isGroup) {
-//     return (
-//       <>
-//         {node.children.map((child) => (
-//           <Node key={child.name} node={child} position={node.position} />
-//         ))}
-//       </>
-//     );
-//   }
-
-//   return (
-//     <mesh
-//       castShadow
-//       geometry={node.geometry}
-//       material={node.material}
-//       position={position}
-//       receiveShadow
-//     />
-//   );
-// };
-
-// export const Model = forwardRef<Group>((_, ref) => {
-//   const { materials, nodes } = useGLTF("/assets/models/turbo_iss.gltf");
-
-//   return (
-//     <group dispose={null} ref={ref} scale={[0.001, 0.001, 0.001]}>
-//       {Object.entries(nodes).map(([name, node]) => (
-//         <Node key={name} node={node} />
-//       ))}
-//       {/* <primitive
-//         object={gltf.scene}
-//         ref={issRef}
-//         scale={[0.001, 0.001, 0.001]}
-//       /> */}
-//     </group>
-//   );
-// });
-
-// useGLTF.preload("/assets/models/turbo_iss.gltf");
 
 export const Iss = () => {
-  const { data: tle } = trpc.iss.tle.useQuery();
+  const { data: tle } = trpc.tle.iss.useQuery();
 
-  const modelRef = useRef<Group>(null);
   const issRef = useRef<Mesh>(null);
   const textRef = useRef<Mesh>(null);
 
   const { setPosition } = useIss();
   const { camera } = useThree();
   const { focus } = useFocus();
-  const { setTimestamp, timestamp } = useTimestamp();
+  const getTime = useTime((state) => state.getTime);
 
-  const gltf = useLoader(GLTFLoader, "/assets/models/turbo_iss.gltf");
-
-  // const obj = useLoader(OBJLoader, "/assets/models/untitled.obj");
-
-  // useEffect(() => {
-  //   if (!issRef.current) {
-  //     return;
-  //   }
-
-  //   let hasRun = false;
-
-  //   if (!hasRun) {
-  //     issRef.current.traverse((object) => (object.frustumCulled = false));
-  //     hasRun = true;
-  //   }
-  // }, []);
+  const iss = useGLTF("/assets/models/turbo_iss.gltf");
 
   useFrame(() => {
-    setTimestamp(Date.now());
-
     if (!tle || !issRef.current || !textRef.current) {
       return;
     }
 
-    const { x, y, z } = getCoordinatesFromTle(tle, timestamp);
+    const { x, y, z } = getCoordinatesFromTle(tle, getTime());
 
     setPosition({ x, y, z });
 
-    // modelRef.current.position.set(x, y, z);
     issRef.current.position.set(x, y, z);
     textRef.current.position.set(x, y - 0.1, z);
     textRef.current.rotation.set(
@@ -107,26 +41,20 @@ export const Iss = () => {
       camera.rotation.y,
       camera.rotation.z
     );
-    // modelRef.current?.position
   });
 
   return (
-    <Suspense fallback={null}>
-      {/* <Model ref={modelRef} /> */}
+    <>
       <primitive
-        object={gltf.scene}
+        object={iss.scene}
         ref={issRef}
-        // rotation={new Euler(0, Math.PI / 2, 0)}
         scale={[0.001, 0.001, 0.001]}
       />
-      {/* <primitive object={obj} scale={[0.001, 0.001, 0.001]} /> */}
-      {focus === "earth" && (
-        <mesh ref={textRef}>
-          <Text color={0xffffff} outlineColor={0x0} outlineWidth={0.01}>
-            ISS
-          </Text>
-        </mesh>
-      )}
-    </Suspense>
+      <mesh ref={textRef} visible={focus === "earth"}>
+        <Text color={0xffffff} outlineColor={0x0} outlineWidth={0.01}>
+          ISS
+        </Text>
+      </mesh>
+    </>
   );
 };
