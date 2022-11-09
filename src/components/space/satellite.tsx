@@ -5,6 +5,8 @@ import { Color, useFrame, useThree } from "@react-three/fiber";
 import { type Mesh, Vector3 } from "three";
 import { getSatelliteName } from "tle.js";
 
+import { useTime } from "@/hooks/time";
+
 import { getCoordinatesFromTle } from "@/utilities/get-coordinates-from-tle";
 
 export type SatelliteProps = {
@@ -15,17 +17,18 @@ export type SatelliteProps = {
 export const Satellite = ({ color, tle }: SatelliteProps) => {
   const [initialized, setInitialized] = useState(false);
 
-  useFrame((/* { clock } */) => {
+  const getTime = useTime((state) => state.getTime);
+
+  useFrame(() => {
     if (!planeteRef.current || !textRef.current) {
       return;
     }
 
     if (!initialized) {
-      // planeteRef.current.add(sprite);
       setInitialized(true);
     }
 
-    const { x, y, z } = getCoordinatesFromTle(tle, Date.now());
+    const { x, y, z } = getCoordinatesFromTle(tle, getTime());
 
     planeteRef.current.position.set(x, y, z);
     textRef.current.position.set(x, y - 0.2, z);
@@ -43,7 +46,6 @@ export const Satellite = ({ color, tle }: SatelliteProps) => {
   const vector = new Vector3();
 
   camera.getWorldDirection(vector);
-  // const theta = Math.atan2(vector.x, vector.z);
 
   return (
     <>

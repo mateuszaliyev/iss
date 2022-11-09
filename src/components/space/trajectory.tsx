@@ -5,7 +5,7 @@ import { Color, useFrame, useThree } from "@react-three/fiber";
 import { Mesh } from "three";
 import { getSatelliteName } from "tle.js";
 
-import { useTimestamp } from "@/hooks/timestamp";
+import { useTime } from "@/hooks/time";
 
 import { getCoordinatesFromTle } from "@/utilities/get-coordinates-from-tle";
 
@@ -14,6 +14,7 @@ export type TrajectoryProps = {
   color: Color;
   endDate: number;
   tle: string;
+  visible?: boolean;
 };
 
 export type TrajectoryPointProps = {
@@ -32,8 +33,9 @@ export const Trajectory = ({
   color,
   endDate,
   tle,
+  visible,
 }: TrajectoryProps) => {
-  const currentTimestamp = useTimestamp((state) => state.timestamp);
+  const getTime = useTime((state) => state.getTime);
 
   const points = useMemo(() => {
     const points: {
@@ -51,7 +53,7 @@ export const Trajectory = ({
       timestamp <= endDate;
       timestamp += 50000
     ) {
-      if (Math.abs(currentTimestamp - timestamp) <= 75000) {
+      if (Math.abs(getTime() - timestamp) <= 75000) {
         continue;
       }
 
@@ -66,10 +68,10 @@ export const Trajectory = ({
     }
 
     return points;
-  }, [beginningDate, currentTimestamp, endDate, tle]);
+  }, [beginningDate, getTime, endDate, tle]);
 
   return (
-    <group>
+    <group visible={visible}>
       {points.map(
         ({ latitude, longitude, name, timestamp, x, y, z }, index) => (
           <TrajectoryPoint
@@ -91,8 +93,6 @@ export const Trajectory = ({
 
 export const TrajectoryPoint = ({
   color,
-  latitude,
-  longitude,
   name,
   timestamp,
   x,
@@ -100,17 +100,6 @@ export const TrajectoryPoint = ({
   z,
 }: TrajectoryPointProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
-
-  // const { data } = trpc.city.get.byLocation.useQuery(
-  //   {
-  //     latitude,
-  //     longitude,
-  //   },
-  //   {
-  //     enabled: showTooltip,
-  //     retry: false,
-  //   }
-  // );
 
   const textRef = useRef<Mesh>(null);
 
@@ -151,7 +140,6 @@ export const TrajectoryPoint = ({
             outlineColor={0x000000}
             outlineWidth={0.01}
           >
-            {/* Nearest city: {data.name} */}
             {`${name}\n${new Date(timestamp).toLocaleDateString("pl-PL", {
               day: "2-digit",
               hour: "2-digit",

@@ -1,20 +1,23 @@
-import type { AppType } from "next/app";
-import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
+import { SSRProvider } from "react-aria";
 
-import { trpc } from "@/utilities/trpc";
+import type { AppType } from "next/app";
+
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+import { Fonts } from "@/components/fonts";
+
+import { trpc } from "@/trpc";
 
 import "@/styles/globals.css";
 
-const Application: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
-  return (
-    <SessionProvider session={session}>
+const Application: AppType = ({ Component, pageProps }) => (
+  <>
+    <Fonts />
+    <SSRProvider>
       <Component {...pageProps} />
-    </SessionProvider>
-  );
-};
+    </SSRProvider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </>
+);
 
 export default trpc.withTRPC(Application);

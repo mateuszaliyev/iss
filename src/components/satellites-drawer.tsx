@@ -7,8 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getLatLngObj, getSatelliteName } from "tle.js";
 import { z } from "zod";
 
-import { ButtonDanger } from "@/components/button/danger";
-import { ButtonPrimary } from "@/components/button/primary";
+import { Button } from "@/components/button";
 import { Drawer } from "@/components/drawer";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
@@ -73,9 +72,9 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
           <span className="text-xl">
             You haven&apos;t added any satellites yet.
           </span>
-          <ButtonPrimary icon={<MdAdd />} onClick={() => setForm(true)}>
+          <Button icon={<MdAdd />} onClick={() => setForm(true)}>
             New Satellite
-          </ButtonPrimary>
+          </Button>
         </div>
       ) : !form ? (
         <>
@@ -113,8 +112,8 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
           onSubmit={(event) => {
             event.preventDefault();
 
-            void handleSubmit(({ color, tle }) => {
-              void addSatellite({
+            void handleSubmit(async ({ color, tle }) => {
+              await addSatellite({
                 color,
                 tle,
               });
@@ -145,14 +144,15 @@ export const SatellitesDrawer = ({ open }: SatellietesDrawerProps) => {
             <Error>{errors.color?.message}</Error>
           </div>
           <div className="flex justify-center gap-4">
-            <ButtonPrimary icon={<MdAdd />}>Add Satellite</ButtonPrimary>
-            <ButtonDanger
+            <Button icon={<MdAdd />}>Add Satellite</Button>
+            <Button
               icon={<MdCancel />}
               onClick={() => setForm(false)}
               type="button"
+              variant="danger"
             >
               Cancel
-            </ButtonDanger>
+            </Button>
           </div>
         </form>
       )}

@@ -18,7 +18,7 @@ export const Drawer = ({ children, open }: DrawerProps) => {
   return (
     <div
       className={clsx(
-        "fixed top-10 bottom-0 right-0 z-20 w-96",
+        "fixed top-10 bottom-0 right-0 z-drawer w-96",
         !open && "pointer-events-none"
       )}
       ref={ref}
